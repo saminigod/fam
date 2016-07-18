@@ -1,0 +1,7 @@
+fam is licensed in two parts.
+
+The fam daemon is licensed under the GNU General Public License; see
+fam/COPYING for the text of this license.
+
+The libfam library and fam.h header are licensed under the GNU Lesser General
+Public License; see libfam/COPYING for the text of this license.

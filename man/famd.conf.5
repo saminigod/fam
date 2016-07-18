@@ -1,0 +1,52 @@
+.TH FAMD.CONF "5" "January 19, 2003" "famd.conf (fam 2.6.10)" "SGI"
+.SH NAME
+famd.conf \- The File Alteration Monitor (FAM) configuration file
+.SH SYNOPSIS
+In addition to its command line options, \fBfamd\fR's behavior
+can also be controlled through its configuration file.  By
+default, this is \fI/usr/local/etc/fam.conf\fR.  The \fB\-c\fR
+command line option can be used to specify an alternate file.
+.SH "FILE FORMAT"
+Configuration lines are in the format \fBoption=value\fR.
+Lines beginning with \fB#\fR or \fB!\fR are ignored.
+\fBfamd\fR recognizes the following options:
+.TP 26
+\fBinsecure_compatibility\fR
+If set to \fItrue\fR, this disables authentication and reduces access security
+as described under SECURITY below.  This is \fIfalse\fR by default.  Setting
+this option to \fItrue\fR is the same as using the \fB\-C\fR command line
+option.
+.TP
+\fBuntrusted_user\fR
+This is the user name or UID of the user account which \fBfamd\fR will use for
+unauthenticated clients.  If a file can't be \fBstat\fRed by this user,
+\fBfamd\fR will not tell unauthenticated clients about the file's existence.
+If an untrusted user is not given in the configuration file, \fBfamd\fR will
+write an error message to the system log and terminate.
+.TP
+\fBlocal_only\fR
+If set to \fItrue\fR, \fBfamd\fR will ignore requests from remote \fBfamd\fRs.
+This is \fIfalse\fR by default.  Setting this option to \fBtrue\fR is the same
+as using the \fB\-L\fR command line option.  This option is ignored if
+\fBfamd\fR is started by \fBinetd\fR.
+.TP
+\fBidle_timeout\fR
+This is the time in seconds that famd will wait before exiting after its last
+client disconnects.  The default is \fI5\fR seconds.  This option is overridden
+by the \fB-T\fR command line option.
+.TP
+\fBnfs_polling_interval\fR
+This is the interval in seconds between polling files over an NFS filesystem.
+The default is \fI6\fR seconds.  This option is overridden by the \fB-t\fR
+command line option.
+.TP
+\fBxtab_verification\fR
+If set to \fItrue\fR, \fBfamd\fR will check the list of exported filesystems
+when remote requests are received to verify that the requests fall on
+filesystems which are exported to the requesting hosts.  This is
+\fItrue\fR by default.  If this option is set to \fIfalse\fR, \fBfamd\fR will
+service remote requests without attempting to perform the verification.  If
+the \fBlocal_only\fR configuration option or \fB-L\fR command line option is
+used, \fBxtab_verification\fR has no effect.
+.SH "SEE ALSO"
+

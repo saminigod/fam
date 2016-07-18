@@ -1,0 +1,2 @@
+INCLUDES = @FAM_INC@ -DFAM_CONF=\"@FAM_CONF@\"
+

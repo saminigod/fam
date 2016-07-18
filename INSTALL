@@ -1,0 +1,62 @@
+BUILDING & INSTALLING FAM
+
+The standard way to build and install FAM is as follows:
+
+    ./configure
+    make
+    make install
+
+
+STARTING FAM
+
+FAM uses RPC, and is usually started by a superserver such as inetd or xinetd.
+
+To manually add FAM:
+
+1. Add FAM to your portmapper
+
+   Add this line to /etc/rpc:
+    sgi_fam         391002  famd             # File Alteration Monitor
+
+2. Add FAM to your superserver
+
+   If you use inetd, add this line to /etc/inetd.conf
+    famd/1-2 stream  rpc/tcp wait    root    /usr/local/sbin/famd    famd
+
+   then tell inetd to reread its configuration file:
+    killall -HUP inetd
+
+   If you use xinetd, add a file similar to the following in /etc/xinetd.d/
+
+    --8<-----8<-----8<-----8<-----8<-----8<-----8<-----8<-----8<--
+    # default: on
+    # description: File Alteration Monitor (FAM) daemon
+    service famd
+    {
+    	type		= RPC UNLISTED
+    	socket_type	= stream
+    	user		= root
+    	group		= nobody
+    	server		= /usr/local/sbin/famd
+    	wait		= yes
+    	protocol	= tcp
+    	rpc_version	= 2
+    	rpc_number	= 391002
+    }
+    --8<-----8<-----8<-----8<-----8<-----8<-----8<-----8<-----8<--
+
+    If you do not want to use either, start FAM with the -T0 option:
+     /usr/local/sbin/famd -T 0
+
+    Naturally you will need to place this in your system's startup
+    file if you want it to be automatically started.
+
+
+3. Ensure that FAM is registered with the portmapper
+
+   Run this and make sure that you get at least one line of output:
+    rpcinfo -p | grep fam
+
+   if you don't, you may need to restart your portmapper and (x)inetd.
+
+
